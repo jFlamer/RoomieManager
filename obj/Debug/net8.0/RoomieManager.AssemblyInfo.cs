@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RoomieManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abb315e7e58d4479d05a68c738a57f14540b3a68")]
 [assembly: System.Reflection.AssemblyProductAttribute("RoomieManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RoomieManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
