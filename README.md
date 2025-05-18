@@ -32,3 +32,11 @@ RoomieManager/
 ├── Startup.cs
 └── appsettings.json
 ```
+
+
+## Baza danych
+* typy czynności(bez godziny itd.) 1...n task(już szczegółowo, kto kiedy itd.)
+* preferencje (w procentach) każdej osoby do danego typu czynnośi
+* priorytety jako rozszerzenie kolumn
+* taski: status, osoba i data może być NULL, lepiej rozszerzać kolumnami, task_taken_by, task_taken_date, task_deadline, task_status (jeżeli ktoś odrzuci review spowrotem NULL)
+* tabela archiwalna
