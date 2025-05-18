@@ -1,9 +1,26 @@
+using Microsoft.EntityFrameworkCore;
+using RoomieManager.Data;
+using RoomieManager.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<RoomieManagerDBContext>(options =>
+    options.UseSqlite("Data Source=RoomieManager.db"));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<RoomieManagerDBContext>();
+    
+    var user = new UserModel{ userName = "admin", password = "pass", isAdmin = true };
+    db.Users.Add(user);
+    db.SaveChanges();
+
+    Console.WriteLine("Dodano użytkownika!");
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

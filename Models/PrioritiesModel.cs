@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace RoomieManager.Models
 {
 
-    class PrioritiesModel
+    public class PrioritiesModel
     {
         [Required]
         public int typeID { get; set; }
         [ForeignKey("typeID")]
         public TaskTypeModel taskType { get; set; }
         [Required]
-        public string roommieID { get; set; }
+        public int roommieID { get; set; }
         [ForeignKey("roommieID")]
         public RoomieModel roomie { get; set; }
         [Required(ErrorMessage = "Enter priority (in percentage)")]
