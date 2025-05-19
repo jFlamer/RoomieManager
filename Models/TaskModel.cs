@@ -12,7 +12,7 @@ namespace RoomieManager.Models
         [ForeignKey("typeID")]
         public TaskTypeModel taskType { get; set; }
         [Required(ErrorMessage = "Enter roomie")]
-        public int roommieID { get; set; }
+        public int roomieID { get; set; }
         [ForeignKey("roomieID")]
         public RoomieModel roomie { get; set; }
         public DateTime plannedStartDateTime { get; set; }
