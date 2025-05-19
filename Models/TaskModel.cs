@@ -12,16 +12,16 @@ namespace RoomieManager.Models
         [ForeignKey("typeID")]
         public TaskTypeModel taskType { get; set; }
         [Required(ErrorMessage = "Enter roomie")]
-        public int roomieID { get; set; }
+        public int? roomieID { get; set; }
         [ForeignKey("roomieID")]
-        public RoomieModel roomie { get; set; }
-        public DateTime plannedStartDateTime { get; set; }
-        public DateTime plannedFinishDateTime { get; set; }
-        public DateTime reviewDateTime { get; set; }
-        public string reviewNote { get; set; }
-        public int reviewRoomieID { get; set; }
+        public RoomieModel? roomie { get; set; }
+        public DateTime? plannedStartDateTime { get; set; }
+        public DateTime? plannedFinishDateTime { get; set; }
+        public DateTime? reviewDateTime { get; set; }
+        public string? reviewNote { get; set; }
+        public int? reviewRoomieID { get; set; }
         [ForeignKey("reviewRoomieID")]
-        public RoomieModel reviewRoomie { get; set; }
+        public RoomieModel? reviewRoomie { get; set; }
 
     }
     
