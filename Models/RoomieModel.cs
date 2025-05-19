@@ -13,6 +13,6 @@ namespace RoomieManager.Models
         public UserModel user { get; set; }
         [Required(ErrorMessage = "Enter roomie name")]
         public string name { get; set; }
-        public string photoURL { get; set; }
+        public string? photoURL { get; set; }
     }
 }

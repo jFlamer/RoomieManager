@@ -12,6 +12,4 @@ namespace RoomieManager.Models
         [Required]
         public bool isAdmin { get; set; }
     }
-
-
 }
