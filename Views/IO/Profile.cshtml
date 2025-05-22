@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h2>Profile</h2>
+
+<form asp-action="RoomieProfile" method="post" enctype="multipart/form-data">
+    <div>
+        <label>Choose picture (jpg/png):</label> <br />
+        <input type="file" name="file" accept=".png, .jpg, .jpeg" />
+    </div>
+    <button type="submit">Upload</button>
+</form>
+
+@if (ViewBag.PicturePath != null)
+{
+    <div>
+        <p>Current picture</p>
+        <img src="@Url.Content(ViewBag.PicturePath)" style="height:32px;width:32px;border-radius:50%;object-fit:cover;" />
+    </div>
+}

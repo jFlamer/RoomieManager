@@ -25,6 +25,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="IO" asp-action="RoomieProfile">Profile</a>
+                        <li class="nav-item">
+                            @{
+                                var userName = Context.Session.GetString("UserName");
+                                var picturePath = ViewBag.PicturePath as string;
+                            }
+                            @if (!string.IsNullOrEmpty(picturePath))
+                            {
+                                <img src="@picturePath" alt="Profile picture" style="height:32px;width:32px;border-radius:50%;object-fit:cover;" />
+                            }
+                        </li>
                     </ul>
                 </div>
             </div>
