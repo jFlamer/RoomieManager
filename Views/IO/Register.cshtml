@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Register</h2>
+
+<form asp-action="Register" method="post">
+    <label>Login:</label>
+    <input type="text" name="login" required />
+    <br />
+    <label>Password:</label>
+    <input type="password" name="password" required />
+    <br />
+    <label>Confirm Password:</label>
+    <input type="password" name="confirmPassword" required />
+    <br />
+    <button type="submit">Register</button>
+</form>
+
+<div>
+    @if (ViewData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @ViewData["ErrorMessage"]
+        </div>
+    }
+</div>

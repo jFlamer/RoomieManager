@@ -42,9 +42,26 @@ public class IOController : Controller
         return View();
     }
 
-    [HttpPost]
-    public IActionResult Register(string login, string password)
+    [HttpGet, AllowAnonymous]
+    public IActionResult Register()
     {
+            return View();
+    }
+    [HttpPost, AllowAnonymous]
+    public IActionResult Register(string login, string password, string confirmPassword)
+    {
+        // Check if the username is taken
+        if (_context.Users.Any(u => u.userName == login))
+        {
+            ViewBag.ErrorMessage = "Username is already taken.";
+            return View();
+        }
+        // Check if the passwords match
+        if (password != confirmPassword)
+        {
+            ViewBag.ErrorMessage = "Passwords do not match.";
+            return View();
+        }
         var hashedPassword = GenerateMD5Hash(password);
         var user = new UserModel
         {
@@ -57,7 +74,7 @@ public class IOController : Controller
         _context.SaveChanges();
 
         // Registration successful, redirect to the login page or show a success message
-        return RedirectToAction("Login");
+        return RedirectToAction("Index", "Home");
     }
 
 

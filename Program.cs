@@ -13,7 +13,7 @@ builder.Services.AddDataProtection()
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<RoomieManagerDBContext>(options =>
-    options.UseSqlite("Data Source=loginy.db"));
+    options.UseSqlite("Data Source=RoomieManager.db"));
 builder.Services.AddSession();
 
 var app = builder.Build();
