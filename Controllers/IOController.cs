@@ -26,7 +26,13 @@ public class IOController : Controller
     [HttpPost, AllowAnonymous]
     public IActionResult Login(string login, string password){
 
-        var hashedPassword = GenerateMD5Hash(password);
+        if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+        {
+            ViewBag.Error = "Login and password cannot be empty.";
+            return View();
+        }
+
+            var hashedPassword = GenerateMD5Hash(password);
         var user = _context.Users.FirstOrDefault(u => u.userName == login && u.password == hashedPassword);
 
         if (user != null)
@@ -77,16 +83,23 @@ public class IOController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+        }
+
 
     private string GenerateMD5Hash(string input)
-    {
-        using (var md5 = MD5.Create())
         {
-            var inputBytes = Encoding.UTF8.GetBytes(input);
-            var hashBytes = md5.ComputeHash(inputBytes);
-            return Convert.ToHexString(hashBytes);
+            using (var md5 = MD5.Create())
+            {
+                var inputBytes = Encoding.UTF8.GetBytes(input);
+                var hashBytes = md5.ComputeHash(inputBytes);
+                return Convert.ToHexString(hashBytes);
+            }
         }
-    }
 
     // public IActionResult Index()
     // {
