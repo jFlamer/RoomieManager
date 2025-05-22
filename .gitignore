@@ -1,0 +1,29 @@
+# Pliki i foldery builda
+bin/
+obj/
+
+# Pliki tymczasowe użytkownika i IDE
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Pliki tymczasowe systemowe
+*.log
+*.tmp
+
+# Visual Studio / Rider / VS Code
+*.vspscc
+*.vssscc
+.vs/
+
+# Konfiguracje lokalne użytkownika
+*.launch.json
+*.swp
+*.DS_Store
+*.idea/
+*.env
+
+# ASP.NET Core specific
+wwwroot/lib/
