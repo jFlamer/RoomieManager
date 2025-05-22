@@ -27,3 +27,8 @@ obj/
 
 # ASP.NET Core specific
 wwwroot/lib/
+
+
+# Baza
+*.db-shm
+*.db-wal
