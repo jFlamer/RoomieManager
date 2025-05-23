@@ -100,43 +100,6 @@ public class IOController : Controller
         return RedirectToAction("Login");
     }
 
-    [HttpGet]
-    public IActionResult RoomieProfile()
-    {
-        var userName = HttpContext.Session.GetString("UserName");
-        var user = _context.Users.FirstOrDefault(u => u.userName == userName);
-        var roomie = _context.Roomies.FirstOrDefault(r => r.userId == user.userId);
-
-        ViewBag.PicturePath = roomie?.photoURL;
-        return View();
-    }
-
-        [HttpPost]
-        public async Task<IActionResult> RoomieProfile(IFormFile file)
-        {
-            var userName = HttpContext.Session.GetString("UserName");
-            var user = _context.Users.FirstOrDefault(u => u.userName == userName);
-            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == user.userId);
-            if (file != null && file.Length > 0)
-            {
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile_pictures");
-                Directory.CreateDirectory(uploadPath);
-
-                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}"; //using GUID to avoid name collisions
-                var filePath = Path.Combine(uploadPath, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                roomie.photoURL = $"/profile_pictures/{fileName}";
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Profile");
-        
-    }
-
 
     private string GenerateMD5Hash(string input)
         {
