@@ -4,6 +4,10 @@ using RoomieManager.Data;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace RoomieManager.Controllers{
 
@@ -24,7 +28,7 @@ public class IOController : Controller
     }
 
     [HttpPost, AllowAnonymous]
-    public IActionResult Login(string login, string password){
+    public async Task<IActionResult> Login(string login, string password){
 
         if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
         {
@@ -32,16 +36,34 @@ public class IOController : Controller
             return View();
         }
 
-            var hashedPassword = GenerateMD5Hash(password);
+        var hashedPassword = GenerateMD5Hash(password);
         var user = _context.Users.FirstOrDefault(u => u.userName == login && u.password == hashedPassword);
 
-        if (user != null)
-        {
-            // User is authenticated, redirect to the main page or dashboard
-            HttpContext.Session.SetString("UserName", login);
-            HttpContext.Session.SetString("Logged", true.ToString());
-            return RedirectToAction("Index", "Home");
-        }
+            if (user != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.userName),
+                    new Claim("UserId", user.userId.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true, // This will keep the user logged in across sessions
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Set cookie expiration time
+                };
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity), authProperties);
+                
+                return RedirectToAction("RoomieProfile", "Profile");
+
+                // User is authenticated, redirect to the main page or dashboard
+                // HttpContext.Session.SetString("UserName", login);
+                // HttpContext.Session.SetString("Logged", true.ToString());
+                // return RedirectToAction("Index", "Home");
+            }
         
         // Authentication failed, show an error message
         ViewBag.ErrorMessage = "Invalid username or password.";
@@ -54,7 +76,7 @@ public class IOController : Controller
             return View();
     }
     [HttpPost, AllowAnonymous]
-    public IActionResult Register(string login, string password, string confirmPassword)
+    public async Task<IActionResult> Register(string login, string password, string confirmPassword)
     {
         // Check if the username is taken
         if (_context.Users.Any(u => u.userName == login))
@@ -89,14 +111,30 @@ public class IOController : Controller
 
         _context.SaveChanges();
 
-        // Registration successful, redirect to the login page or show a success message
-        return RedirectToAction("Index", "Home");
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.userName),
+            new Claim("UserId", user.userId.ToString())
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true, // This will keep the user logged in across sessions
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Set cookie expiration time
+            };
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+        
+        return RedirectToAction("RoomieProfile", "Profile");
     }
 
     [HttpPost]
-    public IActionResult Logout()
+    public async Task<IActionResult> Logout()
     {
-        HttpContext.Session.Clear();
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        // HttpContext.Session.Clear();
+        // Response.Cookies.Delete(".AspNetCore.Session");
         return RedirectToAction("Login");
     }
 

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RoomieManager.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly RoomieManagerDBContext _context;
@@ -17,24 +17,46 @@ namespace RoomieManager.Controllers
             _context = context;
         }
 
-        [HttpGet, AllowAnonymous]
+        [HttpGet]
         public IActionResult RoomieProfile()
         {
-            var userName = HttpContext.Session.GetString("UserName");
-            var user = _context.Users.FirstOrDefault(u => u.userName == userName);
-            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == user.userId);
+            var userClaim = User.FindFirst("UserId")?.Value;
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = int.Parse(userClaim);
+            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == userId);
 
             ViewBag.PicturePath = roomie?.photoURL;
             ViewBag.Name = roomie?.name;
             return View();
+
+            // var userName = HttpContext.Session.GetString("UserName");
+            // var user = _context.Users.FirstOrDefault(u => u.userName == userName);
+            // var roomie = _context.Roomies.FirstOrDefault(r => r.userId == user.userId);
+
+            // ViewBag.PicturePath = roomie?.photoURL;
+            // ViewBag.Name = roomie?.name;
+            // return View();
         }
 
-        [HttpPost, AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> RoomieProfile(RoomieModel roomieModel, IFormFile file)
         {
-            var userName = HttpContext.Session.GetString("UserName");
-            var user = _context.Users.FirstOrDefault(u => u.userName == userName);
-            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == user.userId);
+            // var userName = HttpContext.Session.GetString("UserName");
+            // var user = _context.Users.FirstOrDefault(u => u.userName == userName);
+            // var roomie = _context.Roomies.FirstOrDefault(r => r.userId == user.userId);
+
+            var userClaim = User.FindFirst("UserId")?.Value;
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = int.Parse(userClaim);
+            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == userId);
 
             if (roomie == null)
             {
@@ -63,7 +85,7 @@ namespace RoomieManager.Controllers
                     roomie.photoURL = $"/profile_pictures/{fileName}";
                     _context.SaveChanges();
                 }
-            return RedirectToAction("Profile");
+            return RedirectToAction();
         
     }
     }
