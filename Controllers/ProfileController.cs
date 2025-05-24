@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace RoomieManager.Controllers
 {
-    [Authorize]
+    // [Authorize]
     public class ProfileController : Controller
     {
         private readonly RoomieManagerDBContext _context;

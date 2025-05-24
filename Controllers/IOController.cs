@@ -83,7 +83,7 @@ public class IOController : Controller
             {
                 userId = user.userId,
                 name = login,
-                photoURL = null
+                photoURL = "/profile_pictures/default-user.png"
             };
         _context.Roomies.Add(roomie);
 
