@@ -2,8 +2,25 @@ using RoomieManager.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.DataProtection;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout to 30 minutes
+    options.Cookie.HttpOnly = true; // Make the session cookie HTTP-only
+    options.Cookie.IsEssential = true; // Make the session cookie essential for the application
+});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+{
+    options.LoginPath = "/IO/Login"; // Redirect to login page if not authenticated
+    options.LogoutPath = "/IO/Logout"; // Redirect to logout page after logging out
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Set cookie expiration time
+    options.SlidingExpiration = true; // Enable sliding expiration
+});
 
 
 builder.Services.AddDataProtection()
@@ -14,7 +31,7 @@ builder.Services.AddDataProtection()
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<RoomieManagerDBContext>(options =>
     options.UseSqlite("Data Source=RoomieManager.db"));
-builder.Services.AddSession();
+// builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -26,19 +43,6 @@ using(var scope = app.Services.CreateScope())
 }
 
 app.UseSession();
-
-app.Use(async (context, next) =>
-{
-    await next();
-
-    if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
-    {
-        string ogPath = context.Request.Path.Value;
-        context.Items["originalPath"] = ogPath;
-        context.Request.Path = "/IO/Login";
-        await next();
-    }
-});
 
 // // Configure the HTTP request pipeline.
 // if (!app.Environment.IsDevelopment())
@@ -57,7 +61,6 @@ app.Use(async (ctx, next) =>
 
     if(ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
     {
-        //Re-execute the request so the user gets the error page
         string originalPath = ctx.Request.Path.Value;
         ctx.Items["originalPath"] = originalPath;
         ctx.Request.Path = "/IO/Logowanie";
@@ -69,6 +72,7 @@ app.Use(async (ctx, next) =>
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
