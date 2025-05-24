@@ -78,17 +78,27 @@ public class IOController : Controller
 
         _context.Users.Add(user);
         _context.SaveChanges();
+        
+            var roomie = new RoomieModel
+            {
+                userId = user.userId,
+                name = login,
+                photoURL = "/profile_pictures/default-user.png"
+            };
+        _context.Roomies.Add(roomie);
+
+        _context.SaveChanges();
 
         // Registration successful, redirect to the login page or show a success message
         return RedirectToAction("Index", "Home");
     }
 
-        [HttpPost]
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login");
-        }
+    [HttpPost]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        return RedirectToAction("Login");
+    }
 
 
     private string GenerateMD5Hash(string input)
