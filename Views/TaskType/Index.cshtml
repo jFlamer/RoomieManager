@@ -1,0 +1,33 @@
+@model List<RoomieManager.Models.TaskTypeModel>
+
+<h2>Task Types</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Task Type</th>
+            <th>Description</th>
+            <th>Duration (minutes)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var taskType in Model)
+        {
+            <tr>
+                <td>@taskType.name</td>
+                <td>@taskType.description</td>
+                <td>@taskType.duration</td>
+                <td>
+                    <a asp-action="EditTaskType" asp-route-id="@taskType.taskTypeId" class="btn btn-secondary" aria-label="Edit Task Type">Edit</a>
+                    <form asp-action="DeleteTaskType" method="post" class="inline-form">
+                        <input type="hidden" name="id" value="@taskType.taskTypeId" />
+                        <button type="submit" class="btn btn-danger" aria-label="Delete Task Type" onclick="return confirm('Are you sure you want to delete this task type?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="@Url.Action("CreateTaskType", "TaskType")">Add new type</a>

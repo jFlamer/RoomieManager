@@ -1,0 +1,21 @@
+@model RoomieManager.Models.TaskTypeModel
+
+<h2>Edit task type</h2>
+
+<form asp-action="EditTaskType" method="post">
+    <input type="hidden" name="id" value="@Model.taskTypeId" />
+    
+    <div class="form-group">
+        <label for="name">Task Type Name</label>
+        <input type="text" class="form-control" id="name" name="name" value="@Model.name" />
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description">@Model.description</textarea>
+    </div>
+    <div class="form-group">
+        <label for="duration">Duration (minutes)</label>
+        <input type="number" class="form-control" id="duration" name="duration" value="@Model.duration" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
