@@ -11,7 +11,6 @@ namespace RoomieManager.Models
         public int typeID { get; set; }
         [ForeignKey("typeID")]
         public TaskTypeModel taskType { get; set; }
-        [Required(ErrorMessage = "Enter roomie")]
         public int? roomieID { get; set; }
         [ForeignKey("roomieID")]
         public RoomieModel? roomie { get; set; }

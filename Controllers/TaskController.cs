@@ -14,10 +14,61 @@ namespace RoomieManager.Controllers
             _context = context;
         }
 
-        // [HttpPost]
-        // public IActionResult CreateTask(TaskModel taskModel)
-        // {
+        public IActionResult Index()
+        {
+            var tasks = _context.Tasks.ToList();
+            return View(tasks);
+        }
 
-        // }
+        [HttpGet]
+        public IActionResult CreateTask()
+        {
+            var taskTypes = _context.TaskTypes.ToList();
+            ViewBag.TaskTypes = taskTypes;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateTask(int taskTypeID)
+        {
+            TaskTypeModel tasktype = _context.TaskTypes.FirstOrDefault(t => t.taskTypeId == taskTypeID);
+            if (tasktype == null)
+            {
+                ViewBag.Error = "Task type not found.";
+                return View();
+            }
+
+            var task = new TaskModel
+            {
+                typeID = taskTypeID,
+                taskType = tasktype
+            };
+
+            _context.Tasks.Add(task);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Task");
+        }
+
+        [HttpGet]
+        public IActionResult DeleteTask()
+        {
+            return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult DeleteTask(int id)
+        {
+            var task = _context.Tasks.FirstOrDefault(t => t.taskID == id);
+            if (task == null)
+            {
+                return NotFound();
+
+            }
+
+            _context.Tasks.Remove(task);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Task");
+        }
     }
 }

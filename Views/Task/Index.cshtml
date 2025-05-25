@@ -1,0 +1,42 @@
+@model List<RoomieManager.Models.TaskModel>
+
+<h2>Tasks</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Task Type</th>
+            <th>Assigned roomie</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Review date</th>
+            <th>Review note</th>
+            <th>Review Roomie</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.taskType?.name</td>
+                <td>@task.roomie?.name</td>
+                <td>@task.plannedStartDateTime?</td>
+                <td>@task.plannedFinishDateTime?</td>
+                <td>@task.reviewDateTime?</td>
+                <td>@task.reviewNote?</td>
+                <td>@task.reviewRoomie?.name</td>
+                <td>
+                    @* <a asp-action="EditTaskType" asp-route-id="@taskType.taskTypeId" class="btn btn-secondary" aria-label="Edit Task Type">Edit</a> *@
+                    <form asp-action="DeleteTask" method="post" class="inline-form">
+                        <input type="hidden" name="id" value="@task.taskID" />
+                        <button type="submit" class="btn btn-danger" aria-label="Delete Task Type" onclick="return confirm('Are you sure you want to delete this task type?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="@Url.Action("CreateTask", "Task")">Add new task</a>
+<a class="btn btn-secondary" href="@Url.Action("Index", "TaskType")">Manage Task Types</a>
