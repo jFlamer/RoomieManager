@@ -1,4 +1,6 @@
-@model List<RoomieManager.Models.TaskModel>
+@* @model List<RoomieManager.Models.TaskModel> *@
+
+@model RoomieManager.Models.TaskPageViewModel
 
 <h2>Tasks</h2>
 
@@ -17,16 +19,35 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var task in Model)
+        @foreach (var task in Model.Tasks)
         {
             <tr>
                 <td>@task.taskType?.name</td>
-                <td>@task.roomie?.name</td>
+                <td>
+                    @(Model.Roomies.FirstOrDefault(r => r.roomieId == task.roomieID) != null 
+                        ? Model.Roomies.FirstOrDefault(r => r.roomieId == task.roomieID).name 
+                        : "Not assigned yet")
+                </td>
+                @* <td>@task.roomieID</td> *@
                 <td>@task.plannedStartDateTime?</td>
                 <td>@task.plannedFinishDateTime?</td>
                 <td>@task.reviewDateTime?</td>
                 <td>@task.reviewNote?</td>
-                <td>@task.reviewRoomie?.name</td>
+                <td>
+                    @(Model.Roomies.FirstOrDefault(r => r.roomieId == task.reviewRoomieID) != null 
+                        ? Model.Roomies.FirstOrDefault(r => r.roomieId == task.reviewRoomieID).name 
+                        : "Not assigned yet")
+                </td>
+                @* <td>@task.reviewRoomieID</td> *@
+                <td>
+                    @if (task.roomie == null)
+                    {
+                        <form asp-action="ClaimTask" method="get" class="inline-form">
+                            <input type="hidden" name="id" value="@task.taskID" />
+                            <button type="submit" class="btn btn-primary" aria-label="Claim Task">Claim</button>
+                        </form>
+                    }
+                </td>
                 <td>
                     @if (task.roomie == null)
                     {
