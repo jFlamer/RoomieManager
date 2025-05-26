@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Create Task";
+    var taskTypes = ViewBag.TaskTypes as List<RoomieManager.Models.TaskTypeModel>;
+}
+
+<h2>Create Task</h2>
+
+<form asp-action="CreateTask" method="post">
+    <div class="form-group">
+        <label for="taskTypeId">Task Type</label>
+        <select id="taskTypeID" name="taskTypeID" class="form-control">
+            <option value="">Select task type</option>
+            @foreach (var taskType in taskTypes)
+            {
+                <option value="@taskType.taskTypeId">@taskType.name</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
