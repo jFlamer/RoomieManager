@@ -1,0 +1,18 @@
+@model RoomieManager.Models.TaskModel
+
+<h2>Claim Task</h2>
+
+<form asp-action="ClaimTask" method="post">
+    <input type="hidden" name="id" value="@Model.taskID" />
+
+    <div class="form-group">
+        <label for="plannedStartDateTime">Planned Start Date and Time</label>
+        <input type="datetime-local" class="form-control" id="plannedStartDateTime" name="plannedStartDateTime" value="@(Model.plannedStartDateTime.HasValue ? Model.plannedStartDateTime.Value.ToString("yyyy-MM-ddTHH:mm") : "")" required />
+    </div>
+    <div class="form-group">
+        <label for="plannedFinishDateTime">Planned End Date and Time</label>
+        <input type="datetime-local" class="form-control" id="plannedFinishDateTime" name="plannedFinishDateTime" value="@(Model.plannedFinishDateTime.HasValue ? Model.plannedFinishDateTime.Value.ToString("yyyy-MM-ddTHH:mm") : "")" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Claim Task</button>
+</form>

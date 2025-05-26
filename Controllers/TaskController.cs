@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using RoomieManager.Models;
 using RoomieManager.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace RoomieManager.Controllers
 {
@@ -77,6 +78,49 @@ namespace RoomieManager.Controllers
             _context.Tasks.Remove(task);
             _context.SaveChanges();
             return RedirectToAction("Index", "Task");
+        }
+
+        [HttpGet]
+        public IActionResult ClaimTask(int id)
+        {
+            var task = _context.Tasks.FirstOrDefault(t => t.taskID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return View(task);
+        }
+
+
+        [HttpPost]
+        public IActionResult ClaimTask(int id, DateTime plannedStartDateTime, DateTime plannedFinishDateTime)
+        {
+            var task = _context.Tasks.FirstOrDefault(t => t.taskID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            var userClaim = User.FindFirst("UserId")?.Value;
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = int.Parse(userClaim);
+            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == userId);
+            if (roomie == null)
+            {
+                return NotFound();
+            }
+
+            task.roomieID = roomie.roomieId;
+            task.plannedStartDateTime = plannedStartDateTime;
+            task.plannedFinishDateTime = plannedFinishDateTime;
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Task");
+
         }
     }
 }

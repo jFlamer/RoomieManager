@@ -14,6 +14,7 @@
             <th>Review date</th>
             <th>Review note</th>
             <th>Review Roomie</th>
+            <th>Claim</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -38,6 +39,15 @@
                         : "Not assigned yet")
                 </td>
                 @* <td>@task.reviewRoomieID</td> *@
+                <td>
+                    @if (task.roomie == null)
+                    {
+                        <form asp-action="ClaimTask" method="get" class="inline-form">
+                            <input type="hidden" name="id" value="@task.taskID" />
+                            <button type="submit" class="btn btn-primary" aria-label="Claim Task">Claim</button>
+                        </form>
+                    }
+                </td>
                 <td>
                     @* <a asp-action="EditTaskType" asp-route-id="@taskType.taskTypeId" class="btn btn-secondary" aria-label="Edit Task Type">Edit</a> *@
                     <form asp-action="DeleteTask" method="post" class="inline-form">
