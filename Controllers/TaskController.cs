@@ -17,7 +17,15 @@ namespace RoomieManager.Controllers
         public IActionResult Index()
         {
             var tasks = _context.Tasks.ToList();
-            return View(tasks);
+            var taskTypes = _context.TaskTypes.ToList();
+            var roomies = _context.Roomies.ToList();
+            var taskPageViewModel = new TaskPageViewModel
+            {
+                Tasks = tasks,
+                TaskTypes = taskTypes,
+                Roomies = roomies
+            };
+            return View(taskPageViewModel);
         }
 
         [HttpGet]
