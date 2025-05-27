@@ -16,6 +16,7 @@
             <th>Review Roomie</th>
             <th>Claim</th>
             <th>Actions</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -29,10 +30,10 @@
                         : "Not assigned yet")
                 </td>
                 @* <td>@task.roomieID</td> *@
-                <td>@task.plannedStartDateTime?</td>
-                <td>@task.plannedFinishDateTime?</td>
-                <td>@task.reviewDateTime?</td>
-                <td>@task.reviewNote?</td>
+                <td>@(task.plannedStartDateTime != null ? task.plannedStartDateTime : "")</td>
+                <td>@(task.plannedFinishDateTime != null ? task.plannedFinishDateTime : "")</td>
+                <td>@(task.reviewDateTime != null ? task.reviewDateTime : "")</td>
+                <td>@(task.reviewNote != null ? task.reviewNote : "")</td>
                 <td>
                     @(Model.Roomies.FirstOrDefault(r => r.roomieId == task.reviewRoomieID) != null 
                         ? Model.Roomies.FirstOrDefault(r => r.roomieId == task.reviewRoomieID).name 
