@@ -44,7 +44,8 @@ public class IOController : Controller
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.userName),
-                    new Claim("UserId", user.userId.ToString())
+                    new Claim("UserId", user.userId.ToString()),
+                    new Claim("isAdmin", user.isAdmin.ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -114,7 +115,8 @@ public class IOController : Controller
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, user.userName),
-            new Claim("UserId", user.userId.ToString())
+            new Claim("UserId", user.userId.ToString()),
+            new Claim("isAdmin", user.isAdmin.ToString())
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
