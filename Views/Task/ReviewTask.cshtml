@@ -1,0 +1,14 @@
+@model RoomieManager.Models.TaskModel
+
+<h2>Review Task</h2>
+
+<form asp-action="ReviewTask" method="post">
+    <input type="hidden" name="id" value="@Model.taskID" />
+    <input type="hidden" name="reviewDateTime" value="@DateTime.Now" />
+    <div class="form-group">
+        <label for="reviewNote">Review Note</label>
+        <textarea class="form-control" id="reviewNote" name="reviewNote"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Review</button>
+</form>

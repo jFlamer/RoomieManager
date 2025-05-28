@@ -122,5 +122,50 @@ namespace RoomieManager.Controllers
             return RedirectToAction("Index", "Task");
 
         }
+
+        [HttpGet]
+        public IActionResult ReviewTask(int id)
+        {
+            var task = _context.Tasks.FirstOrDefault(t => t.taskID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            return View(task);
+        }
+        [HttpPost]
+        public IActionResult ReviewTask(int id, DateTime reviewDateTime, string reviewNote)
+        {
+            var task = _context.Tasks.FirstOrDefault(t => t.taskID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            var userClaim = User.FindFirst("UserId")?.Value;
+            if (userClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var userId = int.Parse(userClaim);
+            var roomie = _context.Roomies.FirstOrDefault(r => r.userId == userId);
+            if (roomie == null)
+            {
+                return NotFound();
+            }
+
+            if (task.roomieID == roomie.roomieId)
+            {
+                ViewBag.Error = "You cannot review your own task.";
+                return View(task);
+            }
+
+            task.reviewDateTime = reviewDateTime;
+            task.reviewNote = reviewNote;
+            task.reviewRoomieID = roomie.roomieId;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Task");
+        }
     }
 }

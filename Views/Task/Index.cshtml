@@ -16,6 +16,7 @@
             <th>Review note</th>
             <th>Review Roomie</th>
             <th>Claim</th>
+            <th>Review</th>
             <th>Actions</th>
             <th></th>
         </tr>
@@ -49,6 +50,19 @@
                             <input type="hidden" name="id" value="@task.taskID" />
                             <button type="submit" class="btn btn-primary" aria-label="Claim Task">Claim</button>
                         </form>
+                    }
+                </td>
+                <td>
+                    @if (task.reviewRoomieID == null && task.plannedFinishDateTime < DateTime.Now)
+                    {
+                        <form asp-action="ReviewTask" method="get" class="inline-form">
+                            <input type="hidden" name="id" value="@task.taskID" />
+                            <button type="submit" class="btn btn-secondary" aria-label="Review Task">Review</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span>Reviewed</span>
                     }
                 </td>
                 @* <td>
