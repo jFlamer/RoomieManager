@@ -45,7 +45,7 @@ public class IOController : Controller
                 {
                     new Claim(ClaimTypes.Name, user.userName),
                     new Claim("UserId", user.userId.ToString()),
-                    new Claim("isAdmin", user.isAdmin.ToString())
+                    new Claim("isAdmin", user.isAdmin ? "True" : "False")
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -57,6 +57,8 @@ public class IOController : Controller
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity), authProperties);
+
+                ViewBag.PicturePath = _context.Roomies.FirstOrDefault(r => r.userId == user.userId)?.photoURL;
                 
                 return RedirectToAction("RoomieProfile", "Profile");
 
@@ -116,7 +118,7 @@ public class IOController : Controller
         {
             new Claim(ClaimTypes.Name, user.userName),
             new Claim("UserId", user.userId.ToString()),
-            new Claim("isAdmin", user.isAdmin.ToString())
+            new Claim("isAdmin", user.isAdmin ? "True" : "False")
         };
 
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
