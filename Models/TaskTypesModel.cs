@@ -12,5 +12,7 @@ namespace RoomieManager.Models
         public string description { get; set; }
         [Required(ErrorMessage = "Enter task type duration [in minutes]")]
         public int duration { get; set; }
+        [Required (ErrorMessage = "Enter effort points")]
+        public int effortPoints { get; set; }
     }
 }

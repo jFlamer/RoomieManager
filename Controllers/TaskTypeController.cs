@@ -26,11 +26,11 @@ namespace RoomieManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateTaskType(string name, string description, int duration)
+        public IActionResult CreateTaskType(string name, string description, int duration, int effortPoints)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description) || duration <= 0)
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(description) || duration <= 0 || effortPoints <= 0)
             {
-                ViewBag.Error = "All fields are required and duration must be greater than zero.";
+                ViewBag.Error = "All fields are required and duration and effort points must be greater than zero.";
                 return View();
             }
 
@@ -38,7 +38,8 @@ namespace RoomieManager.Controllers
             {
                 name = name,
                 description = description,
-                duration = duration
+                duration = duration,
+                effortPoints = effortPoints
             };
 
             _context.TaskTypes.Add(taskType);
@@ -60,7 +61,7 @@ namespace RoomieManager.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditTaskType(int id, string name, string description, int duration)
+        public IActionResult EditTaskType(int id, string name, string description, int duration, int effortPoints)
         {
             var taskType = _context.TaskTypes.FirstOrDefault(t => t.taskTypeId == id);
             if (taskType == null)
@@ -81,6 +82,11 @@ namespace RoomieManager.Controllers
             if (duration > 0)
             {
                 taskType.duration = duration;
+            }
+
+            if (effortPoints > 0)
+            {
+                taskType.effortPoints = effortPoints;
             }
 
             _context.SaveChanges();
