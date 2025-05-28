@@ -8,6 +8,7 @@
             <th>Task Type</th>
             <th>Description</th>
             <th>Duration (minutes)</th>
+            <th>Effort Points</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
                 <td>@taskType.name</td>
                 <td>@taskType.description</td>
                 <td>@taskType.duration</td>
+                <td>@taskType.effortPoints</td>
                 <td>
                     <a asp-action="EditTaskType" asp-route-id="@taskType.taskTypeId" class="btn btn-secondary" aria-label="Edit Task Type">Edit</a>
                     <form asp-action="DeleteTaskType" method="post" class="inline-form">
