@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -35,14 +36,39 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="RoomieProfile">Profile</a>
                         <li class="nav-item">
                             @{
-                                var userName = Context.Session.GetString("UserName");
+                                //var userName = User.FindFirst("UserName");
+                                var userName = User.Identity.Name;
                                 var picturePath = ViewBag.PicturePath as string;
                             }
-                            @if (!string.IsNullOrEmpty(picturePath))
+                            @* @if (!string.IsNullOrEmpty(picturePath))
                             {
                                 <img src="@picturePath" alt="Profile picture" style="height:32px;width:32px;border-radius:50%;object-fit:cover;" />
-                            }
+                            } *@
+                            @* <a>@userName</a>
+                            
+                            <a>@picturePath</a> *@
                         </li>
+                        <li>
+                            <a class="nav-link text-dark">@userName</a>
+                        </li>
+                        @{
+                            //var isAdminClaim = User.Identities. .FindFirst("isAdmin");
+                            //var isAdminClaim = User.Claims.First(c => c.Type == "isAdmin");
+                            //var isAdmin = isAdminClaim != null && isAdminClaim.Value == "1";
+                        }
+                        @if(User.Identity != null && User.Identity.IsAuthenticated)
+                        {              
+                            var isAdmin = User.FindFirst("isAdmin")?.Value;          
+                            if (isAdmin == "True"){
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminPanel">Admin Panel</a>
+                                </li>
+                            }else{
+                                <li>
+                                    <img src="@picturePath" alt="Profile picture" style="height:32px;width:32px;border-radius:50%;object-fit:cover;" />
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
             </div>
