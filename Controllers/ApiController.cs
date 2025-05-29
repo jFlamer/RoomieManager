@@ -31,42 +31,42 @@ namespace RoomieManager.Controllers
             return Ok(new { token });
         }
 
-        [HttpPost("users")]
-        public IActionResult CreateUser([FromForm] string userName, [FromForm] string password, [FromForm] bool isAdmin, [FromHeader] string token)
-        {
-            if (!IsAuthenticated(token)) return Unauthorized();
+        // [HttpPost("users")]
+        // public IActionResult CreateUser([FromForm] string userName, [FromForm] string password, [FromForm] bool isAdmin, [FromHeader] string token)
+        // {
+        //     if (!IsAuthenticated(token)) return Unauthorized();
 
-            if (_context.Users.Any(u => u.userName == userName))
-                return BadRequest("Username already exists");
+        //     if (_context.Users.Any(u => u.userName == userName))
+        //         return BadRequest("Username already exists");
 
-            var user = new UserModel
-            {
-                userName = userName,
-                password = GenerateMD5Hash(password),
-                isAdmin = isAdmin
-            };
+        //     var user = new UserModel
+        //     {
+        //         userName = userName,
+        //         password = GenerateMD5Hash(password),
+        //         isAdmin = isAdmin
+        //     };
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
+        //     _context.Users.Add(user);
+        //     _context.SaveChanges();
 
-            var roomie = new RoomieModel
-            {
-                userId = user.userId,
-                name = userName,
-                photoURL = "/profile_pictures/default-user.png"
-            };
+        //     var roomie = new RoomieModel
+        //     {
+        //         userId = user.userId,
+        //         name = userName,
+        //         photoURL = "/profile_pictures/default-user.png"
+        //     };
 
-            _context.Roomies.Add(roomie);
-            _context.SaveChanges();
+        //     _context.Roomies.Add(roomie);
+        //     _context.SaveChanges();
 
-            return Ok(user);
-        }
+        //     return Ok(user);
+        // }
 
-        [HttpDelete("users/{id}")]
-        public IActionResult DeleteUser(int id, [FromHeader] string token)
-        {
-            return Forbid("Deleting users is not allowed via API");
-        }
+        // [HttpDelete("users/{id}")]
+        // public IActionResult DeleteUser(int id, [FromHeader] string token)
+        // {
+        //     return Forbid("Deleting users is not allowed via API");
+        // }
 
         [HttpPost("tasks/{taskId}/assign")]
         public IActionResult AssignSelfToTask(int taskId, [FromHeader] string token)
@@ -108,6 +108,47 @@ namespace RoomieManager.Controllers
             _context.Tasks.Remove(task);
             _context.SaveChanges();
             return Ok("Task deleted");
+        }
+
+        [HttpGet("tasks/available")]
+        public IActionResult ShowAvailableTasks([FromHeader] string token)
+        {
+            if (!IsAuthenticated(token)) return Unauthorized();
+
+            string output = "";
+            output += "taskID" + " " + "taskType" + "\n";
+            foreach (var task in _context.Tasks)
+            {
+                if (task.roomieID == null)
+                {
+                    output += task.taskID + " " +  _context.TaskTypes.Find(task.typeID)?.name + "\n";
+                }
+            }
+            return Ok(output);
+        }
+
+        [HttpGet("tasks/all")]
+        public IActionResult ShowAllTasks([FromHeader] string token) {
+            if (!IsAuthenticated(token)) return Unauthorized();
+            string output = "";
+            output += "taskID" + " " + "taskType" + " tasktype_ID " + "roomie_assigned" + "\n";
+            foreach (var task in _context.Tasks)
+            {
+                output += task.taskID + " " + _context.TaskTypes.Find(task.typeID)?.name + " " + task.typeID + " " + task.roomie + "\n";
+            }
+            return Ok(output);
+        }
+
+        [HttpGet("taskTypes/all")]
+        public IActionResult ShowAllTaskTypes([FromHeader] string token)
+        {
+            if (!IsAuthenticated(token)) return Unauthorized();
+            string output = "";
+            foreach (var taskType in _context.TaskTypes)
+            {
+                output += taskType.taskTypeId + " " + taskType.name + " " + taskType.duration + " " + taskType.effortPoints + " " + taskType.description + "\n";
+            }
+            return Ok(output);
         }
 
         private bool IsAuthenticated(string token)
