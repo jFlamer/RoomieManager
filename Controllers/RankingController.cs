@@ -22,7 +22,7 @@ namespace RoomieManager.Controllers
         }
 
         [HttpGet]
-        public IActionResult Ranking()
+        public IActionResult Ranking(string sortBy = "points")
         {
             var ranking = _context.Roomies.Select(r => new
             {
@@ -31,7 +31,16 @@ namespace RoomieManager.Controllers
                 r.photoURL,
                 totalEP = _context.Tasks.Where(t => t.roomieID == r.roomieId && t.reviewRoomieID != null).Sum(t => (int?)t.taskType.effortPoints) ?? 0,
                 totalTasks = _context.Tasks.Count(t => t.roomieID == r.roomieId && t.reviewRoomieID != null)
-            }).OrderByDescending(r => r.totalEP).ToList();
+            });
+
+            if (sortBy == "tasks")
+            {
+                ranking = ranking.OrderByDescending(r => r.totalTasks);
+            }
+            else
+            {
+                ranking = ranking.OrderByDescending(r => r.totalEP);
+            }
 
             var rankedView = ranking.Select(r => new RankedRoomiesViewModel
             {
@@ -41,6 +50,8 @@ namespace RoomieManager.Controllers
                 totalEffortPoints = r.totalEP,
                 totalTasks = r.totalTasks
             }).ToList();
+
+            ViewBag.SortBy = sortBy;
 
             return View(rankedView);
         }
