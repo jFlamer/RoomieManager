@@ -134,7 +134,7 @@ namespace RoomieManager.Controllers
             output += "taskID" + " " + "taskType" + " tasktype_ID " + "roomie_assigned" + "\n";
             foreach (var task in _context.Tasks)
             {
-                output += task.taskID + " " + _context.TaskTypes.Find(task.typeID)?.name + " " + task.typeID + " " + task.roomie + "\n";
+                output += task.taskID + " " + _context.TaskTypes.Find(task.typeID)?.name + " " + task.typeID + " " + _context.Roomies.Find(task.roomieID)?.name + "\n";
             }
             return Ok(output);
         }
@@ -143,7 +143,7 @@ namespace RoomieManager.Controllers
         public IActionResult ShowAllTaskTypes([FromHeader] string token)
         {
             if (!IsAuthenticated(token)) return Unauthorized();
-            string output = "";
+            string output = "tastTypeId " + "taskTypeName " + "duration " + "effortPoints " + "description";
             foreach (var taskType in _context.TaskTypes)
             {
                 output += taskType.taskTypeId + " " + taskType.name + " " + taskType.duration + " " + taskType.effortPoints + " " + taskType.description + "\n";
