@@ -155,7 +155,7 @@ namespace RoomieManager.Controllers
                 return NotFound();
             }
 
-            if (task.roomieID == roomie.roomieId)
+            if (task.roomieID == null || task.roomieID == roomie.roomieId)
             {
                 ViewBag.Error = "You cannot review your own task.";
                 return View(task);

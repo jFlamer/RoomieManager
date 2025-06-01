@@ -12,3 +12,8 @@
 
     <button type="submit" class="btn btn-primary">Submit Review</button>
 </form>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
