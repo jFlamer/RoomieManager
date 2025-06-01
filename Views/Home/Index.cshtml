@@ -4,9 +4,14 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <form asp-controller="IO" method="post" asp-action="Logout">
-    <button type="submit">Logout</button>
-    </form>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p class="lead">Hello, @User.Identity.Name!</p>
+        <form asp-controller="IO" method="post" asp-action="Logout">
+        <button type="submit">Logout</button>
+        </form>
+    }
+    
 </div>
 
 @model List<RoomieManager.Models.RoomieModel>
