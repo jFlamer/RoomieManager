@@ -1,75 +1,81 @@
-# RoomieManager – System zarządzania zadaniami dla współlokatorów
+# RoomieManager – Task Management System for Roommates
 
-## 👤 Autorzy
+## 👤 Authors
 
-- [Jagoda Flejmer](https://github.com/jFlamer)
-- [Jakub Kierznowski](https://github.com/qualv13)
+* [Jagoda Flejmer](https://github.com/jFlamer)
+* [Jakub Kierznowski](https://github.com/qualv13)
 
-## 📝 Opis projektu
+## 📝 Project Overview
 
-**RoomieManager** to aplikacja webowa stworzona w technologii ASP.NET Core MVC, która umożliwia współlokatorom efektywne zarządzanie wspólnymi obowiązkami domowymi. System pozwala na tworzenie i przypisywanie zadań, co ułatwia organizację codziennych czynności w gospodarstwie domowym.
+**RoomieManager** is a web application built with ASP.NET Core MVC that helps roommates efficiently manage shared household responsibilities. The system allows users to create and assign tasks, improving organization and communication in a shared living space.
 
-## 🎯 Cel aplikacji
+## 🎯 Purpose
 
-Celem aplikacji jest usprawnienie komunikacji i organizacji zadań wśród osób dzielących wspólne mieszkanie. Dzięki niej użytkownicy mogą:
+The primary goal of the application is to streamline task coordination among roommates. It enables users to:
 
-- Tworzyć listy zadań do wykonania
-- Przypisywać zadania konkretnym osobom
-- Monitorować postęp realizacji obowiązków
-- Zarządzać harmonogramem prac domowych
+* Create to-do lists
+* Assign tasks to specific users
+* Track task completion status
+* Manage schedules for regular chores
 
-## ⚙️ Funkcjonalności
+## ⚙️ Key Features
 
-- **Autoryzacja i uwierzytelnianie**: Logowanie użytkowników za pomocą tokenów.
-- **Zarządzanie zadaniami**: Tworzenie, edytowanie i usuwanie zadań.
-- **Przypisywanie zadań**: Możliwość przypisania zadania do konkretnego użytkownika.
-- **Nagradzanie punktami effortu**: Każde zadanie ma swoje punkty zaangażowania, które użytkownik zbiera.
-- **Interfejs API**: Dostęp do funkcjonalności aplikacji poprzez RESTful API.
+* **Authentication & Authorization**: User login via token-based authentication.
+* **Task Management**: Create, edit, and delete tasks with ease.
+* **Task Assignment**: Assign tasks to individual roommates.
+* **Effort Points System**: Each task carries a set effort point value, which is awarded to users upon completion.
+* **RESTful API**: Access all core functionalities via a structured REST API.
 
-## 🚀 Sposób użycia
+## 🚀 Usage Examples
 
-### 1. Logowanie
+### 1. Login
 
 ```bash
 curl -X POST http://localhost:5035/api/login -d "userName=ts3&password=ts3"
 ```
 
-przykładowy token:
-"b738c4cd-ae85-4d33-bb6b-eacda197f19a"
+Example token:
+`b738c4cd-ae85-4d33-bb6b-eacda197f19a`
 
-### przypisz się do taska o id 1
+### Assign yourself to task with ID 1
+
 ```bash
 curl -X POST http://localhost:5035/api/tasks/1/assign/ -H "token: f9fc902f-dd55-4ca3-82ce-571db8226460"
 ```
 
-### stwórz nowy task o podanym id
+### Create a new task with specified type ID
+
 ```bash
 curl -X POST http://localhost:5035/api/tasks/ -H "token: f9fc902f-dd55-4ca3-82ce-571db8226460" -d "typeId=1"
 ```
 
-### usuń task o id
+### Delete task by ID
+
 ```bash
 curl -X DELETE http://localhost:5035/api/tasks/13 -H "token: f9fc902f-dd55-4ca3-82ce-571db8226460"
 ```
 
-### pozyskaj dostępne taski
+### Get available tasks
+
 ```bash
 curl -X GET http://localhost:5035/api/tasks/available -H "token: f9fc902f-dd55-4ca3-82ce-571db8226460"
 ```
 
-### pozyskaj wszystkie taski
+### Get all tasks
+
 ```bash
 curl -X GET http://localhost:5035/api/tasks/all -H "token: 755eb074-1de8-49c5-b2fa-55bb0ff42c71"
 ```
 
-### pozyskaj typy możliwych tasków
+### Get all available task types
+
 ```bash
 curl -X GET http://localhost:5035/api/taskTypes/all -H "token: f9fc902f-dd55-4ca3-82ce-571db8226460"
 ```
 
+## 📂 Project Structure
 
-## Struktura projektu
-```postgresql
+```plaintext
 RoomieManager/
 │
 ├── Controllers/
@@ -95,29 +101,29 @@ RoomieManager/
 │   └── Shared/
 │
 ├── Data/
-│   └── DbInitializer.cs         <-- Dodaje admina i testowe dane
+│   └── DbInitializer.cs         <-- Adds admin and test data
 │
 ├── Program.cs
 ├── Startup.cs
 └── appsettings.json
 ```
 
+## 🗄️ Database Structure
 
-## Baza danych
-* typy czynności(bez godziny itd.) 1...n task(już szczegółowo, kto kiedy itd.)
-* preferencje (w procentach) każdej osoby do danego typu czynnośi
-* priorytety jako rozszerzenie kolumn
-* taski: status, osoba i data może być NULL, lepiej rozszerzać kolumnami, task_taken_by, task_taken_date, task_deadline, task_status (jeżeli ktoś odrzuci review spowrotem NULL)
-* tabela archiwalna
+* **Task Types**: General task categories
+* **Tasks**: Detailed tasks linked to types, with assignees, deadlines, and status
+* **Preferences**: Each user's preference level (as percentages) for different task types
+* **Task Properties**: Status, assigned user, taken date, deadline (nullable if not yet started)
+* **Archive Table**: For storing completed or rejected tasks
 
-🛠️ Technologie
-Backend: ASP.NET Core MVC
+## 🛠️ Technologies
 
-Baza danych: Entity Framework Core z bazą danych SQLite
+* **Backend**: ASP.NET Core MVC
+* **Database**: Entity Framework Core with SQLite
+* **Authentication**: Token-based system
+* **API**: RESTful endpoints
 
-Autoryzacja: Tokeny uwierzytelniające
+## 📄 License
 
-API: REST API
+This project is licensed under the MIT License.
 
-📄 Licencja
-Projekt jest dostępny na licencji MIT.
